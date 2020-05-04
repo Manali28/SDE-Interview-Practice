@@ -1,0 +1,82 @@
+/*
+Solution 1 - Brute force - Time limit exceeded for larger input - O(n2) solution
+*/
+
+class Solution {
+    public boolean validPalindrome(String s) {
+        
+        if(s == null || s.length() == 0) return true;
+        
+        if(isPali(s)){
+            return true;
+        }
+        
+        for(int i = 0; i < s.length(); i++){
+            String str = s.substring(0,i) + s.substring(i+1);
+            if(isPali(str)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean isPali(String s){
+        int i = 0;
+        int j = s.length() - 1;
+        
+        while(i < j){
+            if(s.charAt(i) == s.charAt(j)){
+                i++;
+                j--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/*
+Solution 2 - Greedy approach - O(N) solution
+Explaination at https://www.geeksforgeeks.org/remove-character-string-make-palindrome/
+*/
+
+class Solution {
+    public boolean validPalindrome(String s) {
+        
+        if(s == null || s.length() == 0) return true;
+        
+        int i = 0;
+        int j = s.length() - 1;
+
+        while(i < j){
+            
+            if(s.charAt(i) == s.charAt(j)){
+                i++;
+                j--;
+            }else{
+                if(isPali(s,i+1,j)){
+                    return true;
+                }
+                if(isPali(s,i,j-1)){
+                    return true;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean isPali(String s, int i, int j){
+        
+        while(i < j){
+            if(s.charAt(i) == s.charAt(j)){
+                i++;
+                j--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+}
