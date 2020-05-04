@@ -1,0 +1,76 @@
+/*
+Soution 1 took 34ms
+*/
+
+class Solution {
+    public String licenseKeyFormatting(String S, int K) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for(char c : S.toCharArray()){
+            if(c != '-'){
+                sb.append(Character.toString(Character.toUpperCase(c)));
+            }
+        }
+        int len = sb.length();
+        for(int i = K; i<len; i=i+K){
+            sb.insert(len - i,'-');
+        }
+        
+        return sb.toString();
+        
+    }
+}
+
+/*
+Soution 2 took 36ms but it is more readable
+*/
+
+class Solution {
+    public String licenseKeyFormatting(String S, int K) {
+        
+        S = S.replaceAll("[-]","").toUpperCase();
+        
+        StringBuilder sb = new StringBuilder(S);
+        
+        int i = sb.length() - K;
+        
+        while(i > 0){
+            sb.insert(i,'-');
+            i = i - K;
+        }
+        
+        return sb.toString();
+        
+    }
+}
+
+/*
+Soution 3 took 9ms, more efficient
+Time Complexity : O(S.length())
+Space Complexity : O(S.length())
+*/
+
+class Solution {
+    public String licenseKeyFormatting(String S, int K) {
+        
+        int count = 0;
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i = S.length() - 1; i >= 0; i--){
+            char ch = S.charAt(i);
+            
+            if(ch == '-') continue;
+            
+            if(count == K){
+                sb.append('-');
+                count = 0;
+            }
+            
+            sb.append(ch);
+            count++;
+        }
+        return sb.reverse().toString().toUpperCase();
+    }
+}

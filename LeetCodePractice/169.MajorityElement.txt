@@ -1,0 +1,33 @@
+/*
+I used sorting(O(nlogn) solution) since that clicked me first by seeing "more than half" in the problem statement.
+But implementation of 'Boyer-Moore Voting Algorithm' is a classic for this problem 
+*/
+
+class Solution {
+    public int majorityElement(int[] nums) {
+        if(nums == null || nums.length == 0) return -1;
+        
+        Arrays.sort(nums);
+        
+        return nums[nums.length/2];
+    }
+}
+
+/*
+By Boyer-Moore Voting Algorithm - O(n) solution
+*/
+
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        int candidate = 0;
+        
+        for(int num : nums){
+            if(count == 0){
+                candidate = num;
+            }
+            count += (candidate == num)?1:-1;
+        }
+        return candidate;
+    }
+}

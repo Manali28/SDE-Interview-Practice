@@ -1,0 +1,97 @@
+/*
+Soultion 1: O(nLogn) since used PriorityQueue
+*/
+
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        if(nums == null || nums.length == 0){
+            return res;
+        }
+        
+        HashMap<Integer,Integer> map = new HashMap<>();
+        
+        for(int num:nums){
+            map.put(num,map.getOrDefault(num,0)+1);
+        }
+        
+        PriorityQueue<Integer> queue = new PriorityQueue<>(map.size(),(a,b)->map.get(b)-map.get(a));
+        
+        for(int num:map.keySet()){
+            queue.add(num);
+        }
+        
+        while(queue.size() > 0){
+            int num = queue.poll();
+            int count = map.get(num);
+            
+            if(count > nums.length/3){
+                res.add(num);
+            }else{
+                break;
+            }
+        }
+        
+        return res;
+        
+    }
+}
+
+/*
+Solution 2(Not my Solution): Extended Implementation of Boyer-Moore Voting Algorithm - O(n) solution
+*/
+
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        
+        if (nums.length == 0) {
+            return res;
+        }
+        
+        int cand1 = nums[0];
+        int cand2 = nums[0];
+        int count1 = 0;
+        int count2 = 0;
+        
+        for (int num : nums) {
+            if (num == cand1) {
+                count1++;
+            } else if (num == cand2) {
+                count2++;
+            } else if (count1 == 0) {
+                cand1 = num;
+                count1++;
+            } else if (count2 == 0) {
+                cand2 = num;
+                count2++;
+            } else {
+                count1--;
+                count2--;
+            }
+        }
+        
+        count1 = 0;
+        count2 = 0;
+        
+        for (int num : nums) {
+            if (num == cand1) {
+                count1++;
+            } else if (num == cand2) {
+                count2++;
+            }
+        }
+        
+        int N = nums.length;
+        
+        if (count1 > N / 3) {
+            res.add(cand1);
+        }
+        
+        if (count2 > N / 3) {
+            res.add(cand2);
+        } 
+        
+        return res;
+    }
+}
