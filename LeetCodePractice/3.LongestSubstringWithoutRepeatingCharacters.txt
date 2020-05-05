@@ -1,0 +1,52 @@
+/*
+	Solution 1: O(n2) time complexity
+*/
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s == null) return 0;
+        
+        if(s.length() <= 1) return s.length();
+        
+        int maxLength = Integer.MIN_VALUE;
+        int i = 0;
+        while(i < s.length()){
+            HashMap<Character,Integer> map = new HashMap<>();
+            
+            while(i < s.length() && !map.containsKey(s.charAt(i))){
+                map.put(s.charAt(i),i);
+                i++;
+            }
+            
+            maxLength = Math.max(maxLength,map.size());
+            
+            if(i < s.length()){
+                i = map.get(s.charAt(i)) + 1;
+            }
+            
+        }
+        return maxLength;
+    }
+}
+
+/*
+	Solution 2: O(n) time complexity
+*/
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        Set<Character> set = new HashSet<>();
+        int ans = 0, i = 0, j = 0;
+        while (i < n && j < n) {
+            // try to extend the range [i, j]
+            if (!set.contains(s.charAt(j))){
+                set.add(s.charAt(j++));
+                ans = Math.max(ans, j - i);
+            }
+            else {
+                set.remove(s.charAt(i++));
+            }
+        }
+        return ans;
+    }
+}
