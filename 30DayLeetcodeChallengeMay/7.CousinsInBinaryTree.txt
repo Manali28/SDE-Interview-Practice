@@ -1,0 +1,141 @@
+/*
+In a binary tree, the root node is at depth 0, and children of each depth k node are at depth k+1.
+
+Two nodes of a binary tree are cousins if they have the same depth, but have different parents.
+
+We are given the root of a binary tree with unique values, and the values x and y of two different nodes in the tree.
+
+Return true if and only if the nodes corresponding to the values x and y are cousins.
+
+ ** For Pictures of example goto https://leetcode.com/problems/cousins-in-binary-tree/
+
+Example 1:
+
+(Could not paste the picture)
+
+Input: root = [1,2,3,4], x = 4, y = 3
+Output: false
+
+Example 2:
+
+(Could not paste the picture)
+
+Input: root = [1,2,3,null,4,null,5], x = 5, y = 4
+Output: true
+
+Example 3:
+
+(Could not paste the picture)
+
+Input: root = [1,2,3,null,4], x = 2, y = 3
+Output: false
+ 
+
+Note:
+
+The number of nodes in the tree will be between 2 and 100.
+Each node has a unique integer value from 1 to 100.
+ 
+*/
+
+
+/*
+Since this question had to do with depths on each level, it gave a hint to go by BFS(level order traversal). So I started implementing it and got a working solution. Then later reading at the comments I realized that if I find a node for one value at one level and do not find the same for other value at same value then I should stop my search and return false. Because certainly they are not at same level. So no point traversing the whole tree to find the second root for other value.
+Hence modified my solution a bit.
+
+The Solution looks pretty long but it is easy to follow along.
+
+Time Complexity : O(N) since in worst case it would travers all Nodes.
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if(root == null) return false;
+        
+        Deque<TreeNode> q1 = new ArrayDeque<>();
+        Deque<TreeNode> q2 = new ArrayDeque<>();
+        
+        q1.add(root);
+        
+        while(!q1.isEmpty() || !q2.isEmpty()){
+            Deque<TreeNode> res = new ArrayDeque<>();
+            int count = 0;
+            while(!q1.isEmpty()){
+                root = q1.poll();
+                if(root.left != null){
+                    if(root.left.val == x || root.left.val == y){
+                        res.push(root);
+                    }
+                    q2.add(root.left);
+                }
+                if(root.right != null){
+                    if(root.right.val == x || root.right.val == y){
+                        res.push(root);
+                    }
+                    q2.add(root.right);
+                }
+            }
+            
+            if(!res.isEmpty() && res.size() >= 2){
+                TreeNode t1 = res.pop();
+                TreeNode t2 = res.pop();
+                
+                if(t1 != null && t2 != null && t1 != t2){
+                    return true;
+                }
+            }else{
+                if(!res.isEmpty()){
+                    return false;
+                }
+            }
+            
+            while(!q2.isEmpty()){
+                root = q2.poll();
+                if(root.left != null){
+                    if(root.left.val == x || root.left.val == y){
+                        res.push(root);
+                    }
+                    q1.add(root.left);
+                }
+                if(root.right != null){
+                    if(root.right.val == x || root.right.val == y){
+                        res.push(root);
+                    }
+                    q1.add(root.right);
+                }
+            }
+            
+            if(!res.isEmpty() && res.size() >= 2){
+                TreeNode t1 = res.pop();
+                TreeNode t2 = res.pop();
+                
+                if(t1 != null && t2 != null && t1 != t2){
+                    return true;
+                }
+            }else{
+                if(!res.isEmpty()){
+                    return false;
+                }
+            }
+            
+        }
+        
+        
+        return false;
+    }
+}
