@@ -1,0 +1,66 @@
+/*
+Solution 1: Recursive approach with memoization
+This is good to start 
+Time Complexity: O(M x N)
+Space Complexity: O(M x N)
+*/
+	  
+class Solution {
+    public int uniquePaths(int m, int n) {
+        
+        if(m == 0 && n == 0) return 0;
+	    
+	    int[][] memo = new int[m][n];
+	    
+	    for(int i = 0; i < m; i++){
+	      for(int j = 0; j < n; j++){
+	        memo[i][j] = 0;
+	      }
+	    }
+	    return numOfPathsToSquare(m-1,n-1,memo);
+    }
+	
+	public int numOfPathsToSquare(int i,int j,int[][] memo){
+	    
+	    if(i < 0 || j < 0) return 0;
+
+	    if(memo[i][j] != 0) return memo[i][j];
+	    else if(j == 0 || i == 0) {
+	    	memo[i][j] = 1;
+	    }else {
+	    	memo[i][j] = numOfPathsToSquare(i, j-1, memo) + numOfPathsToSquare(i-1, j, memo);
+	    }
+	    
+	    return memo[i][j];
+	} 
+}
+
+/*
+Solution 2: DP approach
+Time Complexity: O(M x N)
+Space Complexity: O(M x N)
+*/	  
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        
+        if(m == 0 && n == 0) return 0;
+        
+        int[][] path = new int[m][n];
+        
+        for(int i = 0; i < m; i++){
+            path[i][0] = 1;
+        }
+        
+        for(int i = 0; i < n; i++){
+            path[0][i] = 1;
+        }
+        
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                path[i][j] = path[i-1][j] + path[i][j-1];
+            }
+        }
+        return path[m-1][n-1];
+    }
+}
