@@ -1,0 +1,89 @@
+/*
+I had to ask following question during the mock interview:
+
+Number of Paths:
+
+You’re testing a new driverless car that is located at the Southwest (bottom-left) corner of an n×n grid. The car is supposed to get to the opposite, Northeast (top-right), corner of the grid. Given n, the size of the grid’s axes, write a function numOfPathsToDest that returns the number of the possible paths the driverless car can take.
+
+For convenience, let’s represent every square in the grid as a pair (i,j). The first coordinate in the pair denotes the east-to-west axis, and the second coordinate denotes the south-to-north axis. The initial state of the car is (0,0), and the destination is (n-1,n-1).
+
+The car must abide by the following two rules: it cannot cross the diagonal border. In other words, in every step the position (i,j) needs to maintain i >= j
+
+
+I was not able to solve this so I had to look up different sources. This is special case of finding Number of Paths problem where i >= j.
+
+Solution 1 : Recursive
+
+*/
+
+class Solution {
+
+  public static int numOfPathsToDest(int n) {
+    // your code goes here
+    
+	if(n <= 1) return n;
+	int[][] memo = new int[n][n];
+
+	return numOfPathsToSquare(n-1,n-1,memo);
+  }
+
+  public static int numOfPathsToSquare(int i,int j,int[][] memo){
+    
+    if(i < 0 || j < 0) return 0;
+	    
+	if(i < j) memo[i][j] = 0;
+	else if(memo[i][j] != 0) return memo[i][j];
+	else if(j == 0 && i != 0) {
+		memo[i][j] = 1;
+	}else {
+		memo[i][j] = numOfPathsToSquare(i, j-1, memo) + numOfPathsToSquare(i-1, j, memo);
+	}
+	
+	return memo[i][j];
+  }  
+  
+  public static void main(String[] args) {
+    int result = numOfPathsToDest(4);
+    System.out.println(result);
+  }
+}
+
+
+/*
+Solution 2: DP
+*/
+
+import java.io.*;
+import java.util.*;
+
+class Solution {
+
+  public static int numOfPathsToDest(int n) {
+    // your code goes here
+    
+    if(n <= 1) return n;
+    
+    int[][] memo = new int[n][n];
+    
+    for(int i = 0; i < n; i++){
+      memo[0][i] = 1;
+    }
+    
+    for(int i = 1; i < n; i++){
+      for(int j = 1; j < n; j++){
+        if(i == j){
+          memo[i][j] = memo[i-1][j];
+        }else{
+          memo[i][j] = memo[i-1][j] + memo[i][j-1];
+        }
+      }
+    }
+    return memo[n-1][n-1];
+  }  
+  
+  public static void main(String[] args) {
+    int result = numOfPathsToDest(4);
+    System.out.println(result);
+  }
+
+}
