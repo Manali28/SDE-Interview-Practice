@@ -1,0 +1,44 @@
+/*
+There maybe better ways to solve this problem but below one struck me. I simply coded with keeping the problem statement in mind.(Problem statement is little difficult to understand but after reading it 2 3 times, one should be good.)
+
+Time Complexity: O(N) - overall it will be O(N) since we can remove the constant 2k.
+Space Complexity: O(N) - we use StringBuilder
+*/
+
+class Solution {
+    public String reverseStr(String s, int k) {
+        if(s == null || s.length() == 0 || k == 0) return s;
+        
+        int len = s.length();
+        int count = len/(2*k);
+        
+        int i = 0;
+        StringBuilder sb = new StringBuilder(s);
+        while(count != 0){
+            reverse(sb,i,i+k-1);
+            i = i + (2*k);
+            count--;
+        }
+        
+        if(i < len && len - i < k){
+            reverse(sb,i,len-1);
+        }
+        
+        if(i < len && len - i >= k && len - i < (2*k)){
+            reverse(sb,i,i+k-1);
+        }
+        
+        return sb.toString();
+    }
+    
+    public void reverse(StringBuilder s, int i, int j){
+        while(i < j){
+            char iChar = s.charAt(i);
+            char jChar = s.charAt(j);
+            s.setCharAt(i,jChar);
+            s.setCharAt(j,iChar);
+            i++;
+            j--;
+        }
+    }
+}
