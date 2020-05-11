@@ -42,3 +42,36 @@ class Solution {
         }
     }
 }
+
+/*
+Solution 2 - found this on LC solved by someone which is similar to the above one
+*/
+
+class Solution {
+    public String reverseStr(String s, int k) {
+        if(s.isEmpty())
+            return s;
+        
+        int i =0;
+        char[] arr = s.toCharArray();
+        while((i+k)<=s.length()){
+            reverse(arr,i,i+k);
+            i=i+2*k;
+        }
+        if(i<s.length()){
+            reverse(arr,i,s.length());
+        }
+        return new String(arr);
+    }
+    
+    private void reverse(char[] arr, int s, int e){
+        e = e-1;
+        while(s<e){
+            char tmp =arr[s];
+            arr[s]=arr[e];
+            arr[e]=tmp;
+            s++;
+            e--;
+        }
+    }
+}
