@@ -1,0 +1,90 @@
+/*
+This is a question from CTCI. Initially I thought only by checking the heights of left and right tree I would get the answer. But had completely missed that I have to also check the subtrees which form inside the left and right trees. So added that as well.
+
+Below solution is O(NlogN) since the helper method to get height is getting called repeatedly on same nodes.
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null)return true;
+        
+        int left = helper(root.left);
+        int right = helper(root.right);
+        
+        if(Math.abs(right-left) == 0 || Math.abs(right-left) == 1) return true;
+        
+        return math.abs(left - right) < 2 
+            && isBalanced(root.left)
+            && isBalanced(root.right);
+        
+    }
+    
+    public int helper(TreeNode root){
+        if(root == null) return -1; //An empty tree has height -1
+        int left = helper(root.left);
+        int right = helper(root.right);
+        return 1 + Math.max(left,right);
+    }
+}
+
+
+/*
+After referring to the slution in ctci they have a O(N) solution where the height of subtrees is checked during the recursion itself.
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null)return true;
+        
+        return helper(root) != Integer.MIN_VALUE;
+        
+    }
+    
+    public int helper(TreeNode root){
+        if(root == null) return -1;
+        
+        int leftHeight = helper(root.left);
+        if(leftHeight == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        
+        int rightHeight = helper(root.right);
+        if(rightHeight == Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        
+        int heightDiff = rightHeight - leftHeight;
+        
+        if(Math.abs(heightDiff) > 1){
+            return Integer.MIN_VALUE;
+        }else{
+            return 1 + Math.max(leftHeight,rightHeight);
+        }
+    }
+}
