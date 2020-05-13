@@ -1,0 +1,84 @@
+/*
+This is there in ctci and my solution is from ctci.
+Solution 2 will ake up a lot of memory for long examples so there is a tradeoff.
+*/
+
+//Solution 1
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s == null) return false;
+        else if(s.val == t.val && isIdentical(s,t)){
+            return true;
+        }
+        
+        return isSubtree(s.left,t) || isSubtree(s.right,t);
+    }
+    
+    public boolean isIdentical(TreeNode s, TreeNode t){
+        if(s == null && t == null){
+            return true;
+        }
+        if(s == null || t == null){
+            return false;
+        }
+        return s.val == t.val && isIdentical(s.left,t.left) && isIdentical(s.right,t.right);
+    }
+    
+    
+}
+
+
+//Solution 2
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        StringBuilder tree1 = new StringBuilder();
+        StringBuilder tree2 = new StringBuilder();
+        
+        inOrderTraversal(s,tree1);
+        inOrderTraversal(t,tree2);
+        
+        return tree1.indexOf(tree2.toString()) != -1;
+    }
+    
+    public void inOrderTraversal(TreeNode node, StringBuilder sb){
+        if(node == null){
+            sb.append("X");
+            return;
+        }
+        sb.append("#"+ node.val);
+        inOrderTraversal(node.left,sb);
+        inOrderTraversal(node.right,sb);
+    }
+}
