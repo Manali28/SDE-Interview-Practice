@@ -1,6 +1,6 @@
 /*
 This is there in ctci and my solution is from ctci.
-Solution 2 will ake up a lot of memory for long examples so there is a tradeoff.
+Solution 2 will take up a lot of memory for long examples so there is a tradeoff.
 */
 
 //Solution 1
