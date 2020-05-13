@@ -1,0 +1,69 @@
+/*
+Initially since it was inorder succesor I simply did recursive Inorder traversal -> added the result in a List -> traversed the list to find the node and returned its next node.
+The above approach was lacking efficiency. After looking up I found better ways to solve.
+
+*/
+
+//Solution 1
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        	if(root == null) return null;
+	
+            LinkedList<TreeNode> inOrderList = new LinkedList<>();
+            inOrder(root,inOrderList);
+
+            for(int i = 0; i < inOrderList .size()-1; i++){
+                    if(inOrderList.get(i) == p){
+                    return inOrderList.get(i+1);
+                }
+            }
+		return null;
+   	 }
+	
+	public void inOrder(TreeNode root, LinkedList<TreeNode> inOrderList){
+		if(root != null){
+			inOrder(root.left, inOrderList);
+			inOrderList.add(root);
+			inOrder(root.right, inOrderList);
+        }
+    }
+}
+
+//Soution 2 :
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        	if(root == null) return null;
+	        
+            TreeNode res = null;
+            while(root != null){
+                if(root.val > p.val){
+                    res = root;
+                    root = root.left;
+                }else{
+                    root = root.right;
+                }
+            }
+   	    return res; 
+    }
+
+}
