@@ -1,0 +1,76 @@
+/*
+Given two strings s1 and s2, write a function to return true if s2 contains the permutation of s1. In other words, one of the first string's permutations is the substring of the second string.
+
+ 
+
+Example 1:
+
+Input: s1 = "ab" s2 = "eidbaooo"
+Output: True
+Explanation: s2 contains one permutation of s1 ("ba").
+Example 2:
+
+Input:s1= "ab" s2 = "eidboaoo"
+Output: False
+ 
+
+Note:
+
+The input strings only contain lower case letters.
+The length of both given strings is in range [1, 10,000].
+
+
+This one was easy to solve today since I had spend good amount of time to understand yesterday's challenge question. Both are technically same. Just played around with wordings(Permuatation and Anagram  -- https://www.quora.com/What-is-the-difference-between-an-anagram-and-a-permutation-of-a-word).
+*/
+
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        
+        if(s1 == null || s2 == null || s2.length() < s1.length()) return false;
+        
+        int[] hash = new int[26];
+        int start = 0, end = 0, len = s1.length(), diff = len;
+        
+        for(char c : s1.toCharArray()){
+            hash[c - 'a']++;
+        }
+        
+        while(end < len){
+            char ch = s2.charAt(end);
+            
+            hash[ch - 'a']--;
+            
+            if(hash[ch - 'a'] >= 0){
+                diff--;
+            }
+            end++;
+        }
+        
+        if(diff == 0){
+            return true;
+        }
+
+        while(end < s2.length()){
+            char ch = s2.charAt(start);
+            
+            if(hash[ch - 'a'] >= 0){
+                diff++;
+            }
+            
+            hash[ch - 'a']++;
+            start++;
+            
+            ch = s2.charAt(end);
+            hash[ch-'a']--;
+            
+            if(hash[ch-'a'] >= 0){
+                diff--;
+            }
+            if(diff == 0){
+                return true;
+            }
+            end++;
+        }
+        return false;
+    }
+}
