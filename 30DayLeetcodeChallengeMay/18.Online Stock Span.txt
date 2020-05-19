@@ -1,0 +1,70 @@
+/*
+I solved this using 2 stacks but it gave Time Limit Exceeded error so then solved it using one stack taking reference of following links:
+https://leetcode.com/problems/online-stock-span/discuss/168311/C%2B%2BJavaPython-O(1) - for code
+https://leetcode.com/problems/online-stock-span/discuss/636856/Single-stack-explanation-with-Diagram - for visual understanding
+*/
+
+//Solution 1: TLE - using 2 stacks
+
+class StockSpanner {
+
+    Deque<Integer> stack;
+    Deque<Integer> stack2;
+    public StockSpanner() {
+        this.stack = new ArrayDeque<>();
+    }
+    
+    public int next(int price) {
+        if(stack.isEmpty()){
+            stack.push(price);
+            return 1;
+        }else{
+            int count = 1;
+            stack2 = new ArrayDeque<>();
+            if(stack.peek() > price){
+                stack.push(price);
+                return count;
+            }
+            while(!stack.isEmpty() && stack.peek() <= price){
+                count += 1;
+                stack2.push(stack.pop());
+            }
+            while(!stack2.isEmpty()){
+                stack.push(stack2.pop());
+            }
+            stack.push(price);
+            return count;
+        }
+    }
+}
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */
+
+//Solution 2: Using 1 stack
+
+class StockSpanner {
+
+    Deque<int[]> stack;
+    public StockSpanner() {
+        this.stack = new ArrayDeque<>();
+    }
+    
+    public int next(int price) {
+        int res = 1;
+        while(!stack.isEmpty() && stack.peek()[0] <= price){
+            res += stack.pop()[1];
+        }
+        stack.push(new int[]{price,res});
+        return res;
+    }
+}
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */

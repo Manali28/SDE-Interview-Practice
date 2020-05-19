@@ -1,0 +1,103 @@
+/*
+My Solution:
+*/
+
+class Solution {
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if(s == null || s.length() == 0)return 0;
+        
+        HashSet<Character> set = new HashSet<>();
+        int start = 0,end = 0,maxLength = 0;
+        
+        while(end < s.length()){
+            if(set.size() < 2 && !set.contains(s.charAt(end))){
+                set.add(s.charAt(end));
+                maxLength = Math.max(maxLength,end - start + 1);
+                end++;
+            }else if(set.size() <= 2 && set.contains(s.charAt(end))){
+                maxLength = Math.max(maxLength,end - start + 1);
+                end++;
+            }else{
+                start++;
+                end = start;
+                set.clear();
+            }
+        }
+        return maxLength;
+    }
+}
+
+/*
+Leetcodes solution which can be applied to K Distinct characters as well. The above one give Time Limit exceeded error
+*/
+
+class Solution {
+  public int lengthOfLongestSubstringTwoDistinct(String s) {
+    int n = s.length();
+    if (n < 3) return n;
+
+    // sliding window left and right pointers
+    int left = 0;
+    int right = 0;
+    // hashmap character -> its rightmost position 
+    // in the sliding window
+    HashMap<Character, Integer> hashmap = new HashMap<Character, Integer>();
+
+    int max_len = 2;
+
+    while (right < n) {
+      // slidewindow contains less than 3 characters
+      if (hashmap.size() < 3)
+        hashmap.put(s.charAt(right), right++);
+
+      // slidewindow contains 3 characters
+      if (hashmap.size() == 3) {
+        // delete the leftmost character
+        int del_idx = Collections.min(hashmap.values());
+        hashmap.remove(s.charAt(del_idx));
+        // move left pointer of the slidewindow
+        left = del_idx + 1;
+      }
+
+      max_len = Math.max(max_len, right - left);
+    }
+    return max_len;
+  }
+}
+
+/*
+Following is one of the clever and readable solution I found which is good for K Distinct Characters as well
+*/
+
+class Solution {
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        if(s == null || s.length()*k == 0)return 0;
+        
+        int[] hash = new int[256];
+        int len = s.length();
+        
+        int left = 0, count = 0, maxLen = 0;
+        for (int right = 0; right < len; right++) {
+            hash[s.charAt(right)]++;
+            
+            if (hash[s.charAt(right)] == 1) {
+                count++;
+            }
+            
+            if (count <= k && right - left + 1 > maxLen) {
+                maxLen = right - left + 1;
+            }
+            
+            while (left <= right && count > k) {
+                hash[s.charAt(left)]--;
+                if (hash[s.charAt(left)] == 0) {
+                    count--;
+                }
+                
+                left++;
+            }
+        }
+        
+        return maxLen;
+    }
+}

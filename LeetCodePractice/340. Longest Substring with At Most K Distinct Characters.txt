@@ -1,0 +1,33 @@
+/*
+This is an extension of 159. Longest Substring with At Most Two Distinct Characters solved earlier. The Solution 3 mentioned in 159 is better approach. Here I am using LinkedHashMap solution- O(N) time complexity
+*/
+
+class Solution {
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        if(s == null || s.length()*k == 0)return 0;
+        
+        int len = s.length();
+        
+        int start = 0, end = 0, maxLength = 0;
+        
+        LinkedHashMap<Character,Integer> map = new LinkedHashMap<>();
+        
+        while(end < s.length()){
+            Character ch = s.charAt(end);
+            
+            if(map.containsKey(ch)){
+                map.remove(ch);
+            }
+            map.put(ch,end++);
+            
+            if(map.size() > k){
+                Map.Entry<Character,Integer> leftmost = map.entrySet().iterator().next();
+                start = leftmost.getValue() + 1;
+                map.remove(leftmost.getKey());
+            }
+            maxLength = Math.max(maxLength,end - start);
+            
+        }
+        return maxLength;
+    }
+}

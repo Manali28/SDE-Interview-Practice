@@ -50,3 +50,31 @@ public class Solution {
         return ans;
     }
 }
+
+/*
+Solution 3: using HashMap. this is better solution since the i pointer does not have to move little by little.
+the basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, and keep two pointers which define the max substring. move the right pointer to scan through the string , and meanwhile update the hashmap. If the character is already in the hashmap, then move the left pointer to the right of the same character last found. Note that the two pointers can only move forward. --- explanation taken from https://leetcode.com/problems/longest-substring-without-repeating-characters/discuss/1729/11-line-simple-Java-solution-O(n)-with-explanation
+*/
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s == null || s.length() == 0) return 0;
+        
+        HashMap<Character,Integer> map = new HashMap<>();
+        int maxLength = 0;
+        for(int j = 0,i = 0; j < s.length();j++){
+            if(map.containsKey(s.charAt(j))){
+                /*This is to make sure that the pointer j does not move back from its original position
+                if input="abbabc"
+                when i = 3, s.chatAt(3) == 'a' ,
+                we will found last 'a' appears at index 0,
+                but we should not update j from 2 ('b') to 0 ('a'),
+                because here although the 'a' is in hashMap, but it appears before 'b'.*/
+                i = Math.max(map.get(s.charAt(j)),i); 
+            }
+            maxLength = Math.max(maxLength, j - i +1);
+            map.put(s.charAt(j),j+1);
+        }
+        return maxLength;
+    }
+}
