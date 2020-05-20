@@ -1,0 +1,52 @@
+/*
+This was a difficult one and I am happy that I was able to understand the logic on how it can be solved and then able to code it.
+FOr logic understanding this is a great video: https://www.youtube.com/watch?v=eS6PZLjoaq8
+
+The Basic Idea is that in our current window we should have all the characters from String "t". Once we have that we can start moving the left/start pointer to see if we can further reduce the window and still have all the characters from "t" in our current window. If that is not possible then we again start to increase our right/end pointer to find next window where all characters will be present from "t". 
+Also we keep track of the window lengths and store the minimum length and its start so that we can send a result at the end.
+
+*/
+
+class Solution {
+    public String minWindow(String s, String t) {
+        if(s == null || t == null || s.length()*t.length() == 0 || s.length() < t.length())return "";
+        
+        int[] map = new int[256];
+        int count = 0;
+        for(char c : t.toCharArray()){
+            if(map[c] == 0){
+                count++;
+            }
+            map[c]++;
+        }
+        
+        int start = 0,end = 0;
+        int len = Integer.MAX_VALUE;
+        int head = 0;
+        
+        while(end < s.length()){
+            
+            char ch = s.charAt(end);
+            map[ch]--;
+            if(map[ch] == 0){
+                count--;
+            }
+            end++;
+            
+            while(count == 0){
+                ch = s.charAt(start);
+                map[ch]++;
+                if(map[ch] > 0)count++;
+
+                if(len > end - start){
+                    len = end - start;
+                    head = start;
+                }
+                start++;
+            }
+            
+        }
+        
+        return len == Integer.MAX_VALUE ? "": s.substring(head,head+len);
+    }
+}
