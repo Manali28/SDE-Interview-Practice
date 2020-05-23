@@ -1,0 +1,45 @@
+/*
+The solution uses Bucket sort to get the top K elements so it is O(N) solution.
+
+If Heap<PriorityQueue> is used then it gives O(nlogk) complexity where k 
+*/
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        
+        if(nums == null || nums.length == 0 || nums.length*k == 0)return new int[0];
+        
+        HashMap<Integer,Integer> map = new HashMap<>();
+        
+        for(int a: nums){
+            map.put(a,map.getOrDefault(a,0)+1);
+        }
+
+        List<List<Integer>> list = new ArrayList<>();
+        
+        for(int i = 0; i < nums.length+1; i++){
+            list.add(new ArrayList<>());
+        }
+        
+        for(int a:map.keySet()){
+            list.get(map.get(a)).add(a);
+        }
+        
+        int[] result = new int[k];
+        int count = 0;
+        for(int i = list.size() - 1; i >= 0; i--){
+            if (list.get(i) == null) {
+                continue;
+            }
+            for (int num: list.get(i)) {
+                if (count == k) {
+                    return result;
+                } else {
+                    result[count] = num;
+                    count++;
+                }
+            }
+        }
+        return result;
+    }
+}
