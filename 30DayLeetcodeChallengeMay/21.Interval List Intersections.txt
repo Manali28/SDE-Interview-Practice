@@ -1,0 +1,43 @@
+/*
+I was able to get an idea and then looked at solutions to solve it. This https://leetcode.com/problems/interval-list-intersections/discuss/647538/Java-Easy-Video-Tutorial video was really helpful.
+*/
+
+class Solution {
+    public int[][] intervalIntersection(int[][] A, int[][] B) {
+        
+        if(A == null || A.length == 0 || B == null || B.length == 0) return new int[0][0];
+        
+        int aLen = A.length;
+        int bLen = B.length;
+        
+        List<int[]> intervals = new ArrayList<>();
+
+        int i = 0, j = 0;
+        
+        while(i < aLen && j < bLen){
+            if(A[i][1] < B[j][0]){
+                i++;
+            }else if(B[j][1] < A[i][0]){
+                j++;
+            }else{
+                int[] a= new int[2];
+                a[0] = Math.max(A[i][0],B[j][0]);
+                a[1] = Math.min(A[i][1],B[j][1]);
+                intervals.add(a);
+                
+                if(A[i][1] < B[j][1]){
+                    i++;
+                }else if(B[j][1] < A[i][1]){
+                    j++;
+                }else{
+                    i++;
+                    j++;
+                }
+            }
+        }
+        
+        int[][] result = new int[intervals.size()][2];
+        
+        return intervals.toArray(result);
+    }
+}
