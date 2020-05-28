@@ -28,7 +28,7 @@ After running your function, the 2D grid should be:
 
 I initially started with solving on similar line of Number of Island and Surrounded region problem using DFS. I did get a working solution but my solution was not working for all scenarios. So I looked at the solution. 
 
-DFS solution : The trick of passing the count in every call was so elegant. But after reading about the time complexity it turns out that DFS solution works good where the gates and interconnected. So less calls will be overlapped. If the gates are next to each other then because of many overlapping calls the performance decreases.
+DFS solution : The trick of passing the count in every call was so elegant. But after reading about the time complexity it turns out that DFS solution works good where the gates are interconnected. So less calls will be overlapped. If the gates are next to each other then because of many overlapping calls the performance decreases.
 
 BFS Solution: Here every cell is traversed only once. Sp time complexity )(m X n) is stable and so is more efficient.
 
@@ -71,28 +71,36 @@ class Solution {
 /*
 BFS Solution
 */
-
-	public static final int[] dx = {-1, 0, 1, 0};
-	public static final int[] dy = {0, 1, 0, -1};
-	
-	public void wallsAndGates(int[][] rooms) {
-	    if (rooms.length == 0) return;
-	    int m = rooms.length, n = rooms[0].length;
-
-	    Deque<Integer> queue = new ArrayDeque<>();
-	    for (int i = 0; i < m; ++i)
-	        for (int j = 0; j < n; ++j)
-	            if (rooms[i][j] == 0) queue.offer(i * n + j); // Put gates in the queue
-
-	    while (!queue.isEmpty()) {
-	        int x = queue.poll();
-	        int i = x / n, j = x % n;
-	        for (int k = 0; k < 4; ++k) {
-	            int p = i + dx[k], q = j + dy[k]; // empty room
-	            if (0 <= p && p < m && 0 <= q && q < n && rooms[p][q] == Integer.MAX_VALUE) {
-	                rooms[p][q] = rooms[i][j] + 1;
-	                queue.offer(p * n + q);
-	            }
-	        }
-	    }
-	}
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if(rooms == null || rooms.length == 0 || rooms[0].length == 0) return;
+        
+        int r = rooms.length;
+        int c = rooms[0].length;
+        Deque<int[]> queue = new ArrayDeque<>();
+        
+        for(int i = 0; i < r; i++){
+            for(int j = 0; j < c; j++){
+                if(rooms[i][j] == 0){
+                    queue.add(new int[]{i,j});
+                }
+            }
+        }
+        
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        
+        while(!queue.isEmpty()){
+            int[] temp = queue.poll();
+            for(int[] dir: dirs){
+                int x = temp[0] + dir[0];
+                int y = temp[1] + dir[1];
+                
+                if(x >= 0 && y >= 0 && x < r && y < c && rooms[x][y] == Integer.MAX_VALUE) {
+                    rooms[x][y] = rooms[temp[0]][temp[1]] + 1;
+                    queue.add(new int[]{x,y});
+                }
+            }
+        }
+        
+    }
+}
