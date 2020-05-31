@@ -1,0 +1,54 @@
+/*
+This is a combination if Number of Island and Surrounded Regions problem. Here goes my Solution.
+In the solution after converting all boundry zeros to two, I then loop and convert inner zero to 2 which will give be number of closest islands.
+*/
+
+class Solution {
+    public int closedIsland(int[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        
+        int rowLen = grid.length;
+        int colLen = grid[0].length;
+        
+        for(int i = 0; i < rowLen; i++){
+            if(grid[i][0] == 0){
+                boundaryDfs(grid,i,0);
+            }
+            if(grid[i][colLen-1] == 0){
+                boundaryDfs(grid,i,colLen - 1);
+            }
+        }
+        
+        for(int i = 0; i < colLen; i++){
+            if(grid[0][i] == 0){
+                boundaryDfs(grid,0,i);
+            }
+            if(grid[rowLen - 1][i] == 0){
+                boundaryDfs(grid,rowLen - 1,i);
+            }
+        }
+        int count = 0;
+        for(int i = 1; i < rowLen; i++){
+            for(int j = 1; j < colLen; j++){
+                if(grid[i][j] == 0){
+                    count++;
+                    boundaryDfs(grid,i,j);
+                }
+            }
+        }
+        return count;
+        
+    }
+    
+    public void boundaryDfs(int[][] grid, int i, int j){
+        if(i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] != 0)return;
+        
+        grid[i][j] = 2;
+        
+        boundaryDfs(grid, i+1, j);
+        boundaryDfs(grid, i-1, j);
+        boundaryDfs(grid, i, j+1);
+        boundaryDfs(grid, i, j-1);
+        
+    }
+}
