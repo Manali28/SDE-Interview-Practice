@@ -1,0 +1,81 @@
+/*
+I had got idea of what this problem is but then realized that had misunderstood the question a bit. Had to read couple of times to understand it.
+Following Solutions are not my solution
+For Solution 1 i followed https://www.youtube.com/watch?v=waIgDZZp9Wc this explaination
+For Solution 2 is from this https://leetcode.com/problems/longest-word-in-dictionary/discuss/634793/Java-The-easiest-to-understand-trie-solution.-100-Explanation post
+*/
+
+//Solution 1:
+class Solution {
+    public String longestWord(String[] words) {
+        
+        if(words == null || words.length == 0)return "";
+        
+        Arrays.sort(words);
+        
+        HashSet<String> set = new HashSet<>();
+        String result = "";
+        
+        for(String word: words){
+            if(word.length() == 1 || set.contains(word.substring(0,word.length()-1))){
+                if(word.length() > result.length()){
+                    result = word;
+                }
+                set.add(word);
+            }
+        }
+        return result;
+    }
+}
+
+
+//Solution 2:
+class Solution {
+	private TreeNode root;
+	private String result = "";
+
+	public String longestWord(String[] words) {
+		root = new TreeNode();
+
+		for (String w : words)
+			insert(w);
+
+		dfs(root);
+
+		return result;
+	}
+
+	private void dfs(TreeNode node) {
+		if (node == null)
+			return;
+
+		if (node.word != null) {
+			if (node.word.length() > result.length())
+				result = node.word;
+			else if (node.word.length() == result.length() && node.word.compareTo(result) < 0)
+				result = node.word;
+		}
+
+		for (TreeNode child : node.children)
+			if (child != null && child.word != null)
+				dfs(child);
+	}
+
+	private void insert(String word) {
+		TreeNode current = root;
+		for (char c : word.toCharArray()) {
+			if (current.children[c - 'a'] == null)
+				current.children[c - 'a'] = new TreeNode();
+			current = current.children[c - 'a'];
+		}
+		current.word = word;
+	}
+
+}
+
+class TreeNode {
+	TreeNode[] children = new TreeNode[26];
+	String word;
+
+	TreeNode () {}
+}
