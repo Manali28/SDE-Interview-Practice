@@ -1,0 +1,47 @@
+/*
+This is another most frequently asked question at Google currently.
+Code is very much same as the official solution: it has O(N) time and space complexity.
+*/
+
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if((pushed == null && popped == null)|| (pushed.length == 0 && popped.length == 0)) return true;
+        if(pushed == null || popped == null || pushed.length == 0 || popped.length == 0) return false;
+        
+        Deque<Integer> stack = new ArrayDeque<>();
+        int i = 0;
+        for(int num: pushed){
+            stack.push(num);
+            while(!stack.isEmpty() && stack.peek() == popped[i]){
+                stack.pop();
+                i++;
+            }
+        }
+        return stack.isEmpty();
+      
+    }
+}
+
+//Code with O(N) time complexity and O(1) space complexity
+
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        int i = 0, j = 0;
+        
+        for(int x: pushed){
+            pushed[i++] = x;
+            while(i > 0 && pushed[i-1] == popped[j]){
+                --i;  //if same element in pushed and popped then --i, j++
+                j++;
+            }
+        }
+        return i == 0;
+    }
+}
+
+//https://leetcode.com/problems/validate-stack-sequences/discuss/197685/C++JavaPython-Simulation-O(1)-Space
+/*
+Use example Input: pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+Time O(N)
+Space O(1)
+*/
