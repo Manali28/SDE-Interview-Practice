@@ -1,0 +1,37 @@
+/*
+This was really difficult to understand.
+I went through the video and code here for understanding : https://leetcode.com/problems/split-array-into-consecutive-subsequences/discuss/416994/Java-greedy-two-pass-solution-with-clear-comment
+*/
+
+class Solution {
+    public boolean isPossible(int[] nums) {
+        if(nums == null || nums.length == 0)return false;
+        
+        HashMap<Integer,Integer> freq = new HashMap<>();
+        HashMap<Integer,Integer> seqFreq = new HashMap<>();
+        
+        for(int num:nums){
+            freq.put(num,freq.getOrDefault(num,0)+1);
+        }
+        
+        for(int num: nums){
+            if(freq.get(num) == 0){
+                continue;
+            }
+            
+            if(seqFreq.get(num-1) != null && seqFreq.get(num-1) > 0){
+                seqFreq.put(num - 1, seqFreq.getOrDefault(num-1,0)-1);
+                seqFreq.put(num, seqFreq.getOrDefault(num,0)+1);
+                freq.put(num,freq.getOrDefault(num,0)-1);
+            }else if(freq.get(num+1) != null && freq.get(num+1) > 0 && freq.get(num+2) != null && freq.get(num+2) > 0){
+                freq.put(num,freq.getOrDefault(num,0)-1);
+                freq.put(num+1,freq.getOrDefault(num+1,0)-1);
+                freq.put(num+2,freq.getOrDefault(num+2,0)-1);
+                seqFreq.put(num+2,seqFreq.getOrDefault(num+2,0)+1);
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+}
