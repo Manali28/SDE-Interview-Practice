@@ -1,0 +1,52 @@
+/*
+The question was little difficult to understand. But later after understanding the Intuition algo from the solution it was easier to code.
+Code is similar to : https://leetcode.com/problems/expressive-words/discuss/121706/Java-Solution-using-Two-Pointers-with-Detailed-Explanation
+*/
+
+class Solution {
+    public int expressiveWords(String S, String[] words) {
+        if(S == null || S.length() == 0 || words == null || words.length == 0) return 0;
+        
+        int output = 0;
+        
+        for(String word: words){
+            if(checkStrechyWord(S,word)){
+                output++;
+            }
+        }
+       
+        return output;
+    }
+    
+    public boolean checkStrechyWord(String S, String word){
+        if(word == null || word.length() == 0)return false;
+        int i = 0,j = 0;
+        
+        while(i < S.length() && j < word.length()){
+            if(S.charAt(i) == word.charAt(j)){
+                int len1 = getCurrentLengthOfChar(i,S);
+                int len2 = getCurrentLengthOfChar(j,word);
+                
+                if(len1 < len2 || (len1 <= 2 && len1 != len2)){
+                    return false;
+                }
+                
+                i += len1;
+                j += len2;
+                
+            }else{
+                return false;
+            }
+        }
+        return i == S.length() && j == word.length();
+    }
+    
+    public int getCurrentLengthOfChar(int pointer, String word){
+        int currPointer = pointer;
+        while(currPointer < word.length() && word.charAt(currPointer) == word.charAt(pointer)){
+            currPointer++;
+        }
+        return currPointer-pointer;
+    }
+    
+}
