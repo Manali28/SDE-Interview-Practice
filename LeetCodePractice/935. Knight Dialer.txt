@@ -1,0 +1,36 @@
+/*
+This is a very hard problem for me. But thanks to an amazing post written by Google Employer which came to rescue.
+Blog Post: https://medium.com/hackernoon/google-interview-questions-deconstructed-the-knights-dialer-f780d516f029
+Java recursion Solution: https://leetcode.com/problems/knight-dialer/discuss/189322/Java-DFS-with-Memo
+Java DP Solution: https://leetcode.com/problems/knight-dialer/discuss/189265/Concise-Java-DP-Solution
+*/
+
+class Solution {
+    public int knightDialer(int N) {
+        int[][] map = new int[][]{{4, 6}, {6, 8}, {7, 9}, {4, 8}, {0, 3, 9}, {}, {0, 1, 7}, {2, 6}, {1, 3}, {2, 4}};
+        int[][] memo = new int[N+1][10];
+        
+        for(int i = 1; i <= N; i++){
+            Arrays.fill(memo[i],-1);
+        }
+        int result = 0;
+        for(int i = 0; i < 10; i++){
+            result += helper(N, map, memo, i);
+            result %= (int)1e9 + 7;
+        }
+        return result;
+    }
+    
+    public int helper(int N, int[][] map, int[][] memo, int start){
+        if(N == 1) return 1;
+        if(memo[N][start] > -1){
+            return memo[N][start];
+        }
+        memo[N][start] = 0;
+        for (int next : map[start]) {
+            memo[N][start] += helper(N - 1, map, memo, next);
+            memo[N][start] %= (int)1e9 + 7;
+        }
+        return memo[N][start];
+    }
+}
