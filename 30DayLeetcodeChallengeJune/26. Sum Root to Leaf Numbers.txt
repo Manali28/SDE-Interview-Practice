@@ -1,0 +1,114 @@
+/*
+Given a binary tree containing digits from 0-9 only, each root-to-leaf path could represent a number.
+
+An example is the root-to-leaf path 1->2->3 which represents the number 123.
+
+Find the total sum of all root-to-leaf numbers.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Input: [1,2,3]
+    1
+   / \
+  2   3
+Output: 25
+Explanation:
+The root-to-leaf path 1->2 represents the number 12.
+The root-to-leaf path 1->3 represents the number 13.
+Therefore, sum = 12 + 13 = 25.
+Example 2:
+
+Input: [4,9,0,5,1]
+    4
+   / \
+  9   0
+ / \
+5   1
+Output: 1026
+Explanation:
+The root-to-leaf path 4->9->5 represents the number 495.
+The root-to-leaf path 4->9->1 represents the number 491.
+The root-to-leaf path 4->0 represents the number 40.
+Therefore, sum = 495 + 491 + 40 = 1026.
+
+
+Leetcode's official solution is very well explained and I have taken the solution from there
+
+Complexity Analysis
+
+    Time complexity: O(N)since one has to visit each node.
+
+    Space complexity: up to O(H) to keep the stack, where H is a tree height.
+
+*/
+
+//Solution 1 - Recursive
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int rootToLeaf = 0;
+    
+    public int sumNumbers(TreeNode root) {
+        preOrder(root,0);
+        return rootToLeaf;
+    }
+    
+    public void preOrder(TreeNode root, int currSum){
+        if(root == null) return;
+        
+        currSum = currSum * 10 + root.val;
+        
+        if(root.left == null && root.right == null){
+            rootToLeaf += currSum;
+        }
+        
+        preOrder(root.left,currSum);
+        preOrder(root.right, currSum);
+    }
+    
+}
+
+
+//Solution 2 : Iterative
+
+class Solution {
+  public int sumNumbers(TreeNode root) {
+    int rootToLeaf = 0, currNumber = 0;
+    Deque<Pair<TreeNode, Integer>> stack = new ArrayDeque();
+    stack.push(new Pair(root, 0));
+
+    while (!stack.isEmpty()) {
+      Pair<TreeNode, Integer> p = stack.pop();
+      root = p.getKey();
+      currNumber = p.getValue();
+
+      if (root != null) {
+        currNumber = currNumber * 10 + root.val;
+        // if it's a leaf, update root-to-leaf sum
+        if (root.left == null && root.right == null) {
+          rootToLeaf += currNumber;
+        } else {
+          stack.push(new Pair(root.right, currNumber));
+          stack.push(new Pair(root.left, currNumber));
+        }
+      }
+    }
+    return rootToLeaf;
+  }
+}
