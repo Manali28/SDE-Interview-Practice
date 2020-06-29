@@ -1,0 +1,86 @@
+/*
+Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin with JFK.
+
+Note:
+
+If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+All airports are represented by three capital letters (IATA code).
+You may assume all tickets form at least one valid itinerary.
+One must use all the tickets once and only once.
+Example 1:
+
+Input: [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+Example 2:
+
+Input: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"].
+             But it is larger in lexical order.
+			 
+			 
+
+Leetcode official solution has explained this really well.
+I have added 2 ways of solving
+*/
+
+//Solution 1:
+
+class Solution {
+    
+    HashMap<String,LinkedList<String>> map= new HashMap<>();
+    LinkedList<String> result = new LinkedList<>();
+    
+    public List<String> findItinerary(List<List<String>> tickets) {
+        
+        for(List<String> ticket: tickets){
+            String origin = ticket.get(0);
+            String dest = ticket.get(1);
+            
+            if(!map.containsKey(origin)){
+                map.put(origin,new LinkedList<>());
+            }
+            map.get(origin).add(dest);
+        }
+        
+        map.forEach((key,value)->Collections.sort(value));
+        
+        DFS("JFK");
+        
+        return result;
+        
+    }
+    
+    public void DFS(String dest){
+        if(map.containsKey(dest)){
+            LinkedList<String> destList = map.get(dest);
+            while(!destList.isEmpty()){
+                String newDest = destList.pollFirst();
+                DFS(newDest);
+            }
+        }
+        result.offerFirst(dest);
+    }
+}
+
+//Solution 2:
+
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        List<String> res = new ArrayList<>();
+        Map<String, PriorityQueue<String>> map = new HashMap<>();
+        for(List<String> l : tickets){
+            map.putIfAbsent(l.get(0), new PriorityQueue<>());
+            map.get(l.get(0)).add(l.get(1));
+        }
+        helper(res, map, "JFK");
+        return res;
+    }
+    private void helper(List<String> res, Map<String, PriorityQueue<String>> map, String cur){
+        PriorityQueue<String> pq = map.get(cur);
+        while(pq != null && !pq.isEmpty()){
+            helper(res, map, pq.poll());
+        }
+        res.add(0, cur);
+    }
+}
