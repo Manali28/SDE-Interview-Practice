@@ -1,0 +1,31 @@
+/*
+T:O(n); S:O(n)
+this can be solved without extra space as asked in the problem by using the input array and result array and doing the same thing.
+*/
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        if(nums == null || nums.length < 1) return nums;
+        
+        int length = nums.length;
+        int[] leftProd = new int[length];
+        int[] rightProd = new int[length];
+        int[] result = new int[length];
+        
+        leftProd[0] = 1;
+        rightProd[length - 1] = 1;
+        
+        for(int i = 1; i < length; i++){
+            leftProd[i] = leftProd[i-1]*nums[i-1];
+        }
+        
+        for(int i = length-2; i >= 0; i--){
+            rightProd[i] = rightProd[i+1]*nums[i+1];
+        }
+        
+        for(int i = 0; i < length; i++){
+            result[i] = leftProd[i]*rightProd[i];
+        }
+        return result;
+    }
+}
