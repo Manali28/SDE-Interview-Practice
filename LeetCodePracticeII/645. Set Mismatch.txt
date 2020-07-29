@@ -1,0 +1,32 @@
+/*
+I could not come up with O(1) space complexity solution.
+
+T:O(n); S:O(n);
+*/
+
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        if(nums == null || nums.length < 1) return nums;
+        
+        boolean[] isPresent = new boolean[nums.length+1];
+        isPresent[0] = true;
+        
+        int[] result = new int[2];
+        
+        for(int i = 0; i < nums.length; i++){
+            if(isPresent[nums[i]]){
+                result[0] = nums[i];
+            }
+            isPresent[nums[i]] = true;
+        }
+        
+        for(int i = 1; i < isPresent.length; i++){
+            if(!isPresent[i]){
+                result[1] = i;
+                break;
+            }
+        }
+        
+        return result;
+    }
+}
