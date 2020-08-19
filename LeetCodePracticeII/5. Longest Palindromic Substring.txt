@@ -1,0 +1,29 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        
+        if(s == null || s.length() < 2) return s;
+        
+        String maxPali = "";
+        for(int i = 0; i < s.length(); i++){
+            String temp = palindromeLength(s,i,i);
+            if(temp.length() > maxPali.length()){
+                maxPali = temp;
+            }
+            
+            temp = palindromeLength(s,i,i+1);
+            if(temp.length() > maxPali.length()){
+                maxPali = temp;
+            }
+        }
+        return maxPali;
+    }
+    
+    private String palindromeLength(String s, int i, int j){
+        while(i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)){
+            i--;
+            j++;
+        }
+        
+        return s.substring(i+1,j);
+    }
+}

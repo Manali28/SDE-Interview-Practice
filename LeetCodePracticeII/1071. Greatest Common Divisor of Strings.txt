@@ -1,0 +1,13 @@
+class Solution {
+    public String gcdOfStrings(String str1, String str2) {
+        String s = str1.length() < str2.length() ? str1 : str2;
+        for (int d = 1, end = s.length(); d <= end; ++d) {
+            if (end % d != 0) { continue; } // only if length of s mod d is 0, can sub be common divisor.
+            String sub = s.substring(0, end / d);
+            if (str1.replace(sub, "").isEmpty() && str2.replace(sub, "").isEmpty()) {
+                return sub;
+            }
+        }
+        return "";
+    }
+}
